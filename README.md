@@ -45,6 +45,16 @@ Before adding a solution, document or provide:
 - the command or notebook execution order;
 - the output path and schema of generated submissions.
 
+## Experiment log template
+
+Keep a compact experiment table in each competition README so results remain traceable to the exact code and validation setup:
+
+| ID | Commit | Seed | Validation | Local score | Public LB | Private LB | Notes |
+| --- | --- | ---: | --- | ---: | ---: | ---: | --- |
+| `exp-001` | `<short-sha>` | `<seed>` | `<split-or-folds>` | — | — | — | `<model-and-feature-summary>` |
+
+Use `—` for scores that are not available yet. Record the commit before submitting so every leaderboard result can be reproduced from a specific repository state.
+
 ## Data and credentials
 
 Do not commit Kaggle API credentials, downloaded competition datasets, trained model files, or other large generated artifacts. Store credentials using Kaggle's standard local configuration and add competition-specific data and output paths to `.gitignore` when the first solution is introduced.
