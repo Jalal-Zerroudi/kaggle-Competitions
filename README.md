@@ -75,6 +75,19 @@ mkdir -p "competitions/${COMPETITION}/data"
 kaggle competitions download -c "${COMPETITION}" -p "competitions/${COMPETITION}/data"
 ```
 
+On Windows, use the same standard `.kaggle` directory from PowerShell:
+
+```powershell
+python -m pip install kaggle
+New-Item -ItemType Directory -Force "$HOME\.kaggle"
+Move-Item "C:\path\to\kaggle.json" "$HOME\.kaggle\kaggle.json"
+kaggle competitions list
+
+$Competition = "<competition-slug>"
+New-Item -ItemType Directory -Force "competitions/$Competition/data"
+kaggle competitions download -c $Competition -p "competitions/$Competition/data"
+```
+
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.
 
 ## Data and credentials
