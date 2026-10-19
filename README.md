@@ -45,6 +45,20 @@ Before adding a solution, document or provide:
 - the command or notebook execution order;
 - the output path and schema of generated submissions.
 
+## Validation guardrails for future solutions
+
+For each new competition, record these decisions before comparing model scores:
+
+- Choose the split unit to match the task: keep records from the same subject or entity together when they must not cross folds, and preserve chronological order for a forecasting evaluation.
+- Fit imputers, scalers, encoders, feature selection, and other learned preprocessing on each training fold only; apply the fitted transformations to its validation fold.
+- Exclude the target, post-outcome information, and features unavailable at prediction time from model inputs.
+- Save fold assignments or the exact procedure that regenerates them, and compare experiments on the same folds and metric implementation.
+- Keep a simple baseline alongside more complex models. Treat public leaderboard scores as a separate signal, not as a replacement for local validation.
+- Before submission, compare the output with the competition's sample submission: column names, row count, identifier alignment, target shape, and allowed value ranges. Check for missing or non-finite predictions.
+- Document any external data and confirm its use is permitted by that competition's rules.
+
+These are acceptance criteria for future contributions; no validation pipeline or automated submission checks are implemented in the current repository.
+
 ## Experiment log template
 
 Keep a compact experiment table in each competition README so results remain traceable to the exact code and validation setup:
@@ -70,7 +84,7 @@ kaggle competitions list
 After accepting a competition's rules on its Kaggle page, create its local directory and download the data using the competition slug:
 
 ```bash
-COMPETITION=<competition-slug>
+COMPETITION="<competition-slug>"
 mkdir -p "competitions/${COMPETITION}/data"
 kaggle competitions download -c "${COMPETITION}" -p "competitions/${COMPETITION}/data"
 ```
