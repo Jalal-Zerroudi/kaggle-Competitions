@@ -102,6 +102,31 @@ New-Item -ItemType Directory -Force "competitions/$Competition/data"
 kaggle competitions download -c $Competition -p "competitions/$Competition/data"
 ```
 
+
+### Inspect and extract the downloaded data
+
+List the files published for the competition before downloading so unexpected archive contents are visible:
+
+```bash
+kaggle competitions files -c "$COMPETITION"
+```
+
+The competition download command normally creates `competitions/<slug>/data/<slug>.zip`. Extract it without adding another dependency:
+
+```bash
+ARCHIVE="competitions/${COMPETITION}/data/${COMPETITION}.zip"
+python -m zipfile -e "$ARCHIVE" "competitions/${COMPETITION}/data"
+```
+
+PowerShell equivalent:
+
+```powershell
+$Archive = "competitions/$Competition/data/$Competition.zip"
+Expand-Archive -LiteralPath $Archive -DestinationPath "competitions/$Competition/data" -Force
+```
+
+Confirm that the expected train, test, and sample-submission files are present before starting preprocessing. Keep or remove the ZIP locally only after verifying extraction; both the archive and extracted files remain ignored because they are under `data/`.
+
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.
 
 ## Data and credentials
