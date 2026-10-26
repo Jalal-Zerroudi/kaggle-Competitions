@@ -129,6 +129,45 @@ Confirm that the expected train, test, and sample-submission files are present b
 
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.
 
+## Submit and track a result
+
+Generate the submission into the competition's ignored `submissions/` directory, validate it
+against the sample submission, and commit the exact code and configuration used before uploading.
+Then include both the experiment ID and commit SHA in the Kaggle message:
+
+```bash
+COMPETITION="<competition-slug>"
+SUBMISSION="competitions/${COMPETITION}/submissions/exp-001.csv"
+COMMIT_SHA="$(git rev-parse --short HEAD)"
+
+test -f "$SUBMISSION"
+kaggle competitions submit \
+  -c "$COMPETITION" \
+  -f "$SUBMISSION" \
+  -m "exp-001 commit ${COMMIT_SHA}"
+
+kaggle competitions submissions -c "$COMPETITION"
+```
+
+PowerShell equivalent:
+
+```powershell
+$Competition = "<competition-slug>"
+$Submission = "competitions/$Competition/submissions/exp-001.csv"
+$CommitSha = git rev-parse --short HEAD
+
+if (-not (Test-Path -LiteralPath $Submission)) {
+    throw "Submission file not found: $Submission"
+}
+kaggle competitions submit -c $Competition -f $Submission -m "exp-001 commit $CommitSha"
+kaggle competitions submissions -c $Competition
+```
+
+After Kaggle reports the score, copy it into the experiment log in the competition README.
+Keep failed and duplicate submissions in the log as well: they document which artifact was sent
+and prevent the same experiment from being submitted again under another name. Competition rules,
+daily quotas, and submission deadlines remain authoritative on the corresponding Kaggle page.
+
 ## Data and credentials
 
 Do not commit Kaggle API credentials, downloaded competition datasets, trained model files, or other large generated artifacts. Store credentials using Kaggle's standard local configuration and add competition-specific data and output paths to `.gitignore` when the first solution is introduced.
