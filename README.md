@@ -34,6 +34,15 @@ Each competition README should include:
 4. commands for training and generating a submission;
 5. a summary of experiments and scores.
 
+Start from the repository's [competition README template](templates/competition-README.md)
+instead of recreating these sections. For example:
+
+```bash
+COMPETITION="<competition-slug>"
+mkdir -p "competitions/${COMPETITION}"
+cp templates/competition-README.md "competitions/${COMPETITION}/README.md"
+```
+
 ## Reproducibility checklist
 
 Before adding a solution, document or provide:
