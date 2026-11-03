@@ -40,6 +40,20 @@ python -m zipfile -e \
 Document the expected local files, identifiers, target column, and any permitted external data.
 Never commit downloaded data or `kaggle.json`.
 
+Record the exact local snapshot:
+
+```bash
+python scripts/write_data_manifest.py \
+  "competitions/${COMPETITION}/data" \
+  "competitions/${COMPETITION}/data-manifest.sha256"
+```
+
+- **Retrieved at (UTC):** <timestamp>
+- **Kaggle CLI:** <version from `kaggle --version`>
+- **Official file listing reviewed:** <yes/no>
+- **SHA-256 manifest:** `data-manifest.sha256`
+- **External data:** <none, or source, version, license, and rule allowance>
+
 ## Validation
 
 - **Split unit:** <row, subject, group, or time>

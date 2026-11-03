@@ -52,7 +52,8 @@ Before adding a solution, document or provide:
 - the expected local data paths;
 - the train/validation split strategy;
 - the command or notebook execution order;
-- the output path and schema of generated submissions.
+- the output path and schema of generated submissions;
+- a committed SHA-256 manifest for the exact local data snapshot.
 
 ## Validation guardrails for future solutions
 
@@ -135,6 +136,18 @@ Expand-Archive -LiteralPath $Archive -DestinationPath "competitions/$Competition
 ```
 
 Confirm that the expected train, test, and sample-submission files are present before starting preprocessing. Keep or remove the ZIP locally only after verifying extraction; both the archive and extracted files remain ignored because they are under `data/`.
+
+### Record the exact data snapshot
+
+Downloaded files stay ignored, but their checksums can be committed so collaborators can verify that they are using the same snapshot:
+
+```bash
+python scripts/write_data_manifest.py \
+  "competitions/${COMPETITION}/data" \
+  "competitions/${COMPETITION}/data-manifest.sha256"
+```
+
+Review and commit `data-manifest.sha256` with the competition README. Regenerate it only when intentionally accepting a different data snapshot, and record the retrieval date, Kaggle CLI version, and any external-data source or version in that README.
 
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.
 
