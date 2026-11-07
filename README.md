@@ -147,6 +147,16 @@ python scripts/write_data_manifest.py \
   "competitions/${COMPETITION}/data-manifest.sha256"
 ```
 
+Verify the snapshot later from the repository root:
+
+```bash
+python scripts/write_data_manifest.py --check \
+  "competitions/${COMPETITION}/data" \
+  "competitions/${COMPETITION}/data-manifest.sha256"
+```
+
+The check fails when the manifest is malformed, a listed file is missing, a checksum differs, or a path escapes the data directory.
+
 Review and commit `data-manifest.sha256` with the competition README. Regenerate it only when intentionally accepting a different data snapshot, and record the retrieval date, Kaggle CLI version, and any external-data source or version in that README.
 
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.

@@ -48,6 +48,16 @@ python scripts/write_data_manifest.py \
   "competitions/${COMPETITION}/data-manifest.sha256"
 ```
 
+Verify the snapshot later from the repository root:
+
+```bash
+python scripts/write_data_manifest.py --check \
+  "competitions/${COMPETITION}/data" \
+  "competitions/${COMPETITION}/data-manifest.sha256"
+```
+
+The check fails when the manifest is malformed, a listed file is missing, a checksum differs, or a path escapes the data directory.
+
 - **Retrieved at (UTC):** <timestamp>
 - **Kaggle CLI:** <version from `kaggle --version`>
 - **Official file listing reviewed:** <yes/no>
