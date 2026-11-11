@@ -83,6 +83,17 @@ def verify_manifest(data_dir: Path, manifest: Path) -> int:
 
     if not entries:
         raise ValueError(f"No checksum entries found in: {manifest}")
+
+    listed_files = set(entries)
+    actual_files = {
+        path.relative_to(data_dir).as_posix()
+        for path in data_dir.rglob("*")
+        if path.is_file() and path.resolve() != manifest
+    }
+    unlisted_files = sorted(actual_files - listed_files)
+    if unlisted_files:
+        raise ValueError(f"Unlisted data file: {unlisted_files[0]}")
+
     return len(entries)
 
 

@@ -56,7 +56,7 @@ python scripts/write_data_manifest.py --check \
   "competitions/${COMPETITION}/data-manifest.sha256"
 ```
 
-The check fails when the manifest is malformed, a listed file is missing, a checksum differs, or a path escapes the data directory.
+The check fails when the manifest is malformed, a listed file is missing, a checksum differs, an unlisted data file appears, or a path escapes the data directory.
 
 - **Retrieved at (UTC):** <timestamp>
 - **Kaggle CLI:** <version from `kaggle --version`>

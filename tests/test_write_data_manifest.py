@@ -57,6 +57,20 @@ class WriteDataManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "escapes the data directory"):
                 verify_manifest(data_dir, manifest)
 
+    def test_manifest_verification_detects_unlisted_data(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            data_dir = root / "data"
+            data_dir.mkdir()
+            (data_dir / "train.csv").write_bytes(b"train\n")
+            manifest = root / "data-manifest.sha256"
+
+            write_manifest(data_dir, manifest)
+            (data_dir / "extra.csv").write_bytes(b"extra\n")
+
+            with self.assertRaisesRegex(ValueError, "Unlisted data file: extra.csv"):
+                verify_manifest(data_dir, manifest)
+
     def test_empty_directory_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             data_dir = Path(temporary_directory) / "data"

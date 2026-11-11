@@ -155,7 +155,7 @@ python scripts/write_data_manifest.py --check \
   "competitions/${COMPETITION}/data-manifest.sha256"
 ```
 
-The check fails when the manifest is malformed, a listed file is missing, a checksum differs, or a path escapes the data directory.
+The check fails when the manifest is malformed, a listed file is missing, a checksum differs, an unlisted data file appears, or a path escapes the data directory.
 
 Review and commit `data-manifest.sha256` with the competition README. Regenerate it only when intentionally accepting a different data snapshot, and record the retrieval date, Kaggle CLI version, and any external-data source or version in that README.
 
