@@ -50,6 +50,7 @@ def verify_manifest(data_dir: Path, manifest: Path) -> int:
         raise ValueError(f"Manifest file does not exist: {manifest}")
 
     entries = []
+    seen_paths: set[str] = set()
     for line_number, line in enumerate(
         manifest.read_text(encoding="utf-8").splitlines(), start=1
     ):
@@ -64,6 +65,12 @@ def verify_manifest(data_dir: Path, manifest: Path) -> int:
             character not in "0123456789abcdefABCDEF" for character in expected
         ):
             raise ValueError(f"Invalid SHA-256 on manifest line {line_number}")
+
+        if relative_path in seen_paths:
+            raise ValueError(
+                f"Duplicate manifest path on line {line_number}: {relative_path}"
+            )
+        seen_paths.add(relative_path)
 
         path = (data_dir / relative_path).resolve()
         try:

@@ -57,6 +57,25 @@ class WriteDataManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "escapes the data directory"):
                 verify_manifest(data_dir, manifest)
 
+    def test_manifest_rejects_duplicate_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            data_dir = root / "data"
+            data_dir.mkdir()
+            data_file = data_dir / "train.csv"
+            data_file.write_bytes(b"train\n")
+            checksum = hashlib.sha256(b"train\n").hexdigest()
+            manifest = root / "data-manifest.sha256"
+            manifest.write_text(
+                f"{checksum}  train.csv\n{checksum}  train.csv\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(
+                ValueError, "Duplicate manifest path on line 2: train.csv"
+            ):
+                verify_manifest(data_dir, manifest)
+
     def test_manifest_verification_detects_unlisted_data(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
