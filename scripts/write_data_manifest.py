@@ -23,10 +23,18 @@ def write_manifest(data_dir: Path, output: Path) -> int:
     if not data_dir.is_dir():
         raise ValueError(f"Data directory does not exist: {data_dir}")
 
-    files = sorted(
-        path for path in data_dir.rglob("*")
-        if path.is_file() and path.resolve() != output
-    )
+    files = []
+    for path in sorted(data_dir.rglob("*")):
+        if not path.is_file() or path.resolve() == output:
+            continue
+        try:
+            path.resolve().relative_to(data_dir)
+        except ValueError as error:
+            relative_path = path.relative_to(data_dir).as_posix()
+            raise ValueError(
+                f"Data file resolves outside the data directory: {relative_path}"
+            ) from error
+        files.append(path)
     if not files:
         raise ValueError(f"No files found under: {data_dir}")
 

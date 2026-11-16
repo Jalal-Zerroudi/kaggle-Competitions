@@ -57,6 +57,21 @@ class WriteDataManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "escapes the data directory"):
                 verify_manifest(data_dir, manifest)
 
+    def test_manifest_creation_rejects_symlink_outside_data_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            data_dir = root / "data"
+            data_dir.mkdir()
+            outside = root / "outside.csv"
+            outside.write_bytes(b"outside\n")
+            (data_dir / "linked.csv").symlink_to(outside)
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "Data file resolves outside the data directory: linked.csv",
+            ):
+                write_manifest(data_dir, root / "data-manifest.sha256")
+
     def test_manifest_rejects_duplicate_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
