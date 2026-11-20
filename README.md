@@ -161,6 +161,20 @@ Review and commit `data-manifest.sha256` with the competition README. Regenerate
 
 The `data/` directory and `kaggle.json` are already excluded by this repository's `.gitignore`. Never print or commit the token.
 
+## Tests
+
+The regression suite exercises manifest creation and verification, including deterministic
+ordering, changed checksums, path traversal, external symlinks, duplicate paths, unlisted files,
+and empty datasets. It uses only the Python standard library.
+
+Run all tests from the repository root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+A successful run reports seven passing tests and exits with status 0.
+
 ## Submit and track a result
 
 Generate the submission into the competition's ignored `submissions/` directory, validate it
